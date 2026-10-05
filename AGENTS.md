@@ -9,4 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- Keep the storefront as a single interactive catalog experience driven by local product data; this preserves a fast demo without inventing backend behavior.
+- Keep catalog records in `src/data/products.ts` and render list/detail views from that shared local source; this prevents drift without inventing backend behavior.

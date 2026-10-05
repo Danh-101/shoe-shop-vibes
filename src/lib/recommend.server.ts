@@ -5,7 +5,7 @@ import { products } from "@/data/products";
 export type Recommendation = { slug: string; reason: string };
 
 export async function recommendShoes(need: string): Promise<{ summary: string; items: Recommendation[] }> {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("Tính năng gợi ý AI chưa được cấu hình.");
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",

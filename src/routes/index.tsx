@@ -1,15 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import heroAsset from "@/assets/shoes/hero.avif.asset.json";
 import pegasusAsset from "@/assets/shoes/pegasus.avif.asset.json";
 import dunkAsset from "@/assets/shoes/dunk.avif.asset.json";
-import newBalanceAsset from "@/assets/shoes/newbalance.avif.asset.json";
 import converseAsset from "@/assets/shoes/converse.avif.asset.json";
 import sambaAsset from "@/assets/shoes/samba.avif.asset.json";
 import campusAsset from "@/assets/shoes/campus.avif.asset.json";
-import pumaAsset from "@/assets/shoes/puma.avif.asset.json";
+import { money, products } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,15 +30,6 @@ const categories = [
   { name: "Streetwear", subtitle: "Dẫn đầu đường phố", image: dunkAsset.url },
   { name: "Classic", subtitle: "Biểu tượng vượt thời gian", image: converseAsset.url },
 ];
-
-const products = [
-  { brand: "New Balance", name: "530 White Silver", price: 2690000, oldPrice: 2990000, image: newBalanceAsset.url, tag: "-10%", rating: "4.9 · 128", stock: "Còn hàng · 36–44" },
-  { brand: "Converse", name: "Chuck 70 Canvas Black", price: 1850000, image: converseAsset.url, tag: "Mới", rating: "4.8 · 96", stock: "Còn hàng · 35–43" },
-  { brand: "adidas", name: "Samba OG White Black", price: 2800000, image: sambaAsset.url, rating: "4.9 · 214", stock: "Sắp hết · 38–42" },
-  { brand: "Puma", name: "Suede XL Red", price: 1990000, oldPrice: 2390000, image: pumaAsset.url, tag: "-17%", rating: "4.7 · 82", stock: "Còn hàng · 37–44" },
-];
-
-const money = (value: number) => `${new Intl.NumberFormat("vi-VN").format(value)}₫`;
 
 function Storefront() {
   const [query, setQuery] = useState("");
@@ -114,7 +104,7 @@ function Storefront() {
 
         <section id="san-pham" className="mx-auto max-w-[88rem] scroll-mt-24 px-4 pb-20 sm:px-6">
           <div className="mb-7 flex items-end justify-between gap-4"><div><p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">Được săn đón</p><h2 className="font-display text-3xl font-bold sm:text-4xl">Bán chạy tuần này</h2></div><p className="text-sm text-stone">{visibleProducts.length} sản phẩm</p></div>
-          {visibleProducts.length ? <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">{visibleProducts.map((product) => <article key={product.name} className="product-lift overflow-hidden rounded-lg border border-border bg-card"><div className="relative overflow-hidden bg-background"><img src={product.image} alt={`${product.brand} ${product.name}`} className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-105" />{product.tag && <span className="absolute left-3 top-3 rounded-sm bg-primary px-2 py-1 font-display text-[10px] font-bold uppercase text-primary-foreground">{product.tag}</span>}<Button variant="icon" aria-label={liked.includes(product.name) ? "Bỏ yêu thích" : "Thêm vào yêu thích"} onClick={() => setLiked((items) => items.includes(product.name) ? items.filter((item) => item !== product.name) : [...items, product.name])} className="absolute right-2 top-2 h-9 w-9 rounded-full bg-paper/90 px-0"><Heart size={17} fill={liked.includes(product.name) ? "currentColor" : "none"} className={liked.includes(product.name) ? "text-primary" : "text-ink"} /></Button></div><div className="p-3 sm:p-4"><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-stone">{product.brand}</p><h3 className="mt-1 min-h-10 font-display text-sm font-semibold sm:text-base">{product.name}</h3><p className="mt-1 text-xs text-stone"><span className="text-primary">★★★★★</span> {product.rating}</p><div className="mt-3 flex flex-wrap items-baseline gap-2"><span className="font-display text-sm font-bold sm:text-base">{money(product.price)}</span>{product.oldPrice && <span className="text-xs text-stone line-through">{money(product.oldPrice)}</span>}</div><p className={`mt-1 text-[11px] font-medium ${product.stock.startsWith("Sắp") ? "text-primary" : "text-success"}`}>{product.stock}</p><Button className="mt-4 w-full px-2" onClick={() => setCartCount((count) => count + 1)}>Thêm vào giỏ</Button></div></article>)}</div> : <div className="border-y border-border py-16 text-center"><p className="font-display text-xl font-bold">Không tìm thấy sản phẩm</p><p className="mt-2 text-sm text-stone">Thử tìm theo tên thương hiệu hoặc mẫu giày khác.</p></div>}
+          {visibleProducts.length ? <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">{visibleProducts.map((product) => <article key={product.name} className="product-lift overflow-hidden rounded-lg border border-border bg-card"><div className="relative overflow-hidden bg-background"><Link to="/san-pham/$slug" params={{ slug: product.slug }} aria-label={`Xem ${product.name}`}><img src={product.image} alt={`${product.brand} ${product.name}`} className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-105" /></Link>{product.tag && <span className="absolute left-3 top-3 rounded-sm bg-primary px-2 py-1 font-display text-[10px] font-bold uppercase text-primary-foreground">{product.tag}</span>}<Button variant="icon" aria-label={liked.includes(product.name) ? "Bỏ yêu thích" : "Thêm vào yêu thích"} onClick={() => setLiked((items) => items.includes(product.name) ? items.filter((item) => item !== product.name) : [...items, product.name])} className="absolute right-2 top-2 h-9 w-9 rounded-full bg-paper/90 px-0"><Heart size={17} fill={liked.includes(product.name) ? "currentColor" : "none"} className={liked.includes(product.name) ? "text-primary" : "text-ink"} /></Button></div><div className="p-3 sm:p-4"><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-stone">{product.brand}</p><h3 className="mt-1 min-h-10 font-display text-sm font-semibold sm:text-base"><Link to="/san-pham/$slug" params={{ slug: product.slug }} className="transition-colors hover:text-primary">{product.name}</Link></h3><p className="mt-1 text-xs text-stone"><span className="text-primary">★★★★★</span> {product.rating}</p><div className="mt-3 flex flex-wrap items-baseline gap-2"><span className="font-display text-sm font-bold sm:text-base">{money(product.price)}</span>{product.oldPrice && <span className="text-xs text-stone line-through">{money(product.oldPrice)}</span>}</div><p className={`mt-1 text-[11px] font-medium ${product.stock.startsWith("Sắp") ? "text-primary" : "text-success"}`}>{product.stock}</p><Button className="mt-4 w-full px-2" onClick={() => setCartCount((count) => count + 1)}>Thêm vào giỏ</Button></div></article>)}</div> : <div className="border-y border-border py-16 text-center"><p className="font-display text-xl font-bold">Không tìm thấy sản phẩm</p><p className="mt-2 text-sm text-stone">Thử tìm theo tên thương hiệu hoặc mẫu giày khác.</p></div>}
         </section>
 
         <section id="thuong-hieu" className="bg-ink text-paper"><div className="mx-auto grid max-w-[88rem] items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12"><div className="lg:col-span-5"><p className="mb-3 font-display text-xs font-bold uppercase tracking-[0.3em] text-primary">Chuẩn từ từng bước chân</p><h2 className="max-w-[18ch] font-display text-3xl font-bold uppercase leading-tight">Chuyên môn. Chọn lọc. Chính hãng.</h2><p className="mt-4 max-w-[46ch] text-sm leading-relaxed text-paper/65">Mỗi phối màu được chọn lọc từ các thương hiệu hàng đầu, ảnh chụp đúng sản phẩm và tồn kho theo từng size.</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:col-span-7">{[["6+","Thương hiệu"],["COD","Toàn quốc"],["4","Ảnh mỗi phối màu"],["100%","Chính hãng"]].map(([value,label]) => <div key={label} className="rounded-md border border-paper/10 bg-paper/5 p-5"><p className="font-display text-2xl font-extrabold text-primary">{value}</p><p className="mt-1 text-xs text-paper/65">{label}</p></div>)}</div></div></section>

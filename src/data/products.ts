@@ -20,7 +20,7 @@ export type Product = {
   stock: string;
   description: string;
   materials: string[];
-  colors: ProductColor[];
+  colors: [ProductColor, ...ProductColor[]];
   sizes: string[];
 };
 

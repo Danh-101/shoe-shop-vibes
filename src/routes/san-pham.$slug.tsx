@@ -81,7 +81,7 @@ function ProductDetail() {
             <p className="mt-5 border-y border-border py-5 text-sm leading-relaxed text-stone">{product.description}</p>
 
             <fieldset className="mt-6">
-              <legend className="font-display text-sm font-bold">Màu sắc: <span className="font-normal text-stone">{product.colors[selectedColor].name}</span></legend>
+              <legend className="font-display text-sm font-bold">Màu sắc: <span className="font-normal text-stone">{product.colors[selectedColor]?.name ?? product.colors[0].name}</span></legend>
               <div className="mt-3 flex flex-wrap gap-3">
                 {product.colors.map((color, index) => <Button key={color.name} type="button" variant="outline" size="sm" onClick={() => setSelectedColor(index)} className={cn("h-10 gap-2 px-3", selectedColor === index && "border-primary text-primary")} aria-pressed={selectedColor === index}><span className={cn("h-4 w-4 rounded-full border", color.swatchClass)} /><span>{color.name}</span></Button>)}
               </div>

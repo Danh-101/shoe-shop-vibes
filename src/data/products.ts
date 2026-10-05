@@ -22,6 +22,8 @@ export type Product = {
   materials: string[];
   colors: [ProductColor, ...ProductColor[]];
   sizes: string[];
+  materialType: string;
+  style: string;
 };
 
 export const products: Product[] = [
@@ -43,6 +45,8 @@ export const products: Product[] = [
       { name: "Đen", swatchClass: "bg-ink border-ink" },
     ],
     sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44"],
+    materialType: "Mesh",
+    style: "Running retro, đi bộ hằng ngày, êm chân",
   },
   {
     slug: "converse-chuck-70-canvas-black",
@@ -60,6 +64,8 @@ export const products: Product[] = [
       { name: "Trắng ngà", swatchClass: "bg-paper border-border-strong" },
     ],
     sizes: ["35", "36", "37", "38", "39", "40", "41", "42", "43"],
+    materialType: "Canvas",
+    style: "Classic tối giản, đi học, phối đồ casual",
   },
   {
     slug: "adidas-samba-og-white-black",
@@ -77,6 +83,8 @@ export const products: Product[] = [
       { name: "Xanh lá", swatchClass: "bg-success border-success" },
     ],
     sizes: ["38", "39", "40", "41", "42"],
+    materialType: "Da thật",
+    style: "Terrace/lifestyle, phong cách retro, đế phẳng",
   },
   {
     slug: "puma-suede-xl-red",
@@ -95,6 +103,8 @@ export const products: Product[] = [
       { name: "Đen trắng", swatchClass: "bg-ink border-ink" },
     ],
     sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+    materialType: "Da lộn",
+    style: "Streetwear/skate, dáng to nổi bật",
   },
 ];
 

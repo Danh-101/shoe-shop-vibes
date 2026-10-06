@@ -44,7 +44,7 @@ function ProductDetail() {
 
   const addToCart = () => {
     if (!selectedSize) return;
-    cart.add({ slug: product.slug, color: product.colors[selectedColor].name, size: selectedSize, quantity });
+    cart.add({ slug: product.slug, color: (product.colors[selectedColor] ?? product.colors[0]).name, size: selectedSize, quantity });
     setAdded(true);
   };
 

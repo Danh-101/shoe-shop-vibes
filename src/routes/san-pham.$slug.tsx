@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { findProduct, money, sizeChart } from "@/data/products";
+import { ProductReviews } from "@/components/ProductReviews";
+import { cart, useCartCount } from "@/lib/cart";
 
 export const Route = createFileRoute("/san-pham/$slug")({
   beforeLoad: ({ params }) => {
@@ -36,11 +38,13 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [added, setAdded] = useState(false);
+  const cartCount = useCartCount();
 
   if (!product) return null;
 
   const addToCart = () => {
     if (!selectedSize) return;
+    cart.add({ slug: product.slug, color: (product.colors[selectedColor] ?? product.colors[0]).name, size: selectedSize, quantity });
     setAdded(true);
   };
 
@@ -52,7 +56,7 @@ function ProductDetail() {
       <header className="sticky top-0 z-50 border-b border-border bg-paper/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[88rem] items-center justify-between px-4 sm:px-6">
           <Link to="/" className="font-display text-xl font-extrabold sm:text-2xl">STEP<span className="text-primary">/</span>LAB</Link>
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold transition-colors hover:text-primary"><ChevronLeft size={18} /> Tiếp tục mua sắm</Link>
+          <div className="flex items-center gap-4"><Link to="/" className="hidden items-center gap-2 text-sm font-bold transition-colors hover:text-primary sm:inline-flex"><ChevronLeft size={18} /> Tiếp tục mua sắm</Link><Link to="/gio-hang" className="inline-flex h-10 items-center gap-2 rounded-md bg-ink px-3 text-sm font-bold text-paper"><ShoppingBag size={18} /> Giỏ <span className="grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[11px] text-primary-foreground">{cartCount}</span></Link></div>
         </div>
       </header>
 
@@ -76,14 +80,14 @@ function ProductDetail() {
           <section className="lg:col-span-5">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">{product.brand}</p>
             <h1 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">{product.name}</h1>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm"><span className="text-primary">★★★★★</span><span className="text-stone">{product.rating} đánh giá</span><span className={product.stock.startsWith("Sắp") ? "font-semibold text-primary" : "font-semibold text-success"}>{product.stock}</span></div>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm"><span className="text-primary">★★★★★</span><a href="#danh-gia" className="text-stone underline-offset-2 hover:underline">{product.rating} đánh giá</a><span className={product.stock.startsWith("Sắp") ? "font-semibold text-primary" : "font-semibold text-success"}>{product.stock}</span></div>
             <div className="mt-6 flex items-baseline gap-3"><span className="font-display text-2xl font-extrabold">{money(product.price)}</span>{product.oldPrice && <span className="text-sm text-stone line-through">{money(product.oldPrice)}</span>}</div>
             <p className="mt-5 border-y border-border py-5 text-sm leading-relaxed text-stone">{product.description}</p>
 
             <fieldset className="mt-6">
               <legend className="font-display text-sm font-bold">Màu sắc: <span className="font-normal text-stone">{product.colors[selectedColor]?.name ?? product.colors[0].name}</span></legend>
               <div className="mt-3 flex flex-wrap gap-3">
-                {product.colors.map((color, index) => <Button key={color.name} type="button" variant="outline" size="sm" onClick={() => setSelectedColor(index)} className={cn("h-10 gap-2 px-3", selectedColor === index && "border-primary text-primary")} aria-pressed={selectedColor === index}><span className={cn("h-4 w-4 rounded-full border", color.swatchClass)} /><span>{color.name}</span></Button>)}
+                {product.colors.map((color, index) => <Button key={color.name} type="button" variant="outline" size="sm" onClick={() => { setSelectedColor(index); setAdded(false); }} className={cn("h-10 gap-2 px-3", selectedColor === index && "border-primary text-primary")} aria-pressed={selectedColor === index}><span className={cn("h-4 w-4 rounded-full border", color.swatchClass)} /><span>{color.name}</span></Button>)}
               </div>
             </fieldset>
 
@@ -130,6 +134,7 @@ function ProductDetail() {
             </div>
           </section>
         </div>
+        <ProductReviews slug={product.slug} colors={product.colors.map((c) => c.name)} sizes={product.sizes} />
       </main>
 
       <footer className="mt-16 border-t border-border bg-ink text-paper"><div className="mx-auto flex max-w-[88rem] flex-col justify-between gap-3 px-4 py-7 text-sm sm:flex-row sm:px-6"><span className="font-display font-extrabold">STEP<span className="text-primary">/</span>LAB</span><span className="text-paper/60">Giày chính hãng cho nhịp sống thành thị</span></div></footer>

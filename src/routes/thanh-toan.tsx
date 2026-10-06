@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { findProduct, money } from "@/data/products";
 import { cart, useCart } from "@/lib/cart";
+import { orders } from "@/lib/orders";
 
 export const Route = createFileRoute("/thanh-toan")({
   head: () => ({
@@ -34,9 +35,20 @@ function Checkout() {
       <main className="mx-auto max-w-3xl px-4 py-10">
         <h1 className="font-display text-3xl font-extrabold">Thanh toán</h1>
         {items.length === 0 ? <p className="mt-6 text-sm text-stone">Giỏ hàng trống. <Link to="/" className="text-primary">Tiếp tục mua sắm</Link></p> : (
-          <form className="mt-6 grid gap-4" onSubmit={(e) => { e.preventDefault(); cart.clear(); setDone(`SL${Date.now().toString().slice(-6)}`); }}>
-            <div className="grid gap-4 sm:grid-cols-2"><input required placeholder="Họ và tên" className={input} /><input required type="tel" pattern="0[0-9]{9}" placeholder="Số điện thoại" className={input} /></div>
-            <input required placeholder="Địa chỉ nhận hàng" className={input} />
+          <form className="mt-6 grid gap-4" onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.currentTarget;
+            const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+            const phone = (form.elements.namedItem("phone") as HTMLInputElement).value;
+            const address = (form.elements.namedItem("address") as HTMLInputElement).value;
+            const note = (form.elements.namedItem("note") as HTMLTextAreaElement).value;
+            const code = `SL${Date.now().toString().slice(-6)}`;
+            orders.add({ code, name, phone, address, note, items, subtotal, shipping, total: subtotal + shipping, status: "Chờ xác nhận", createdAt: new Date().toISOString() });
+            cart.clear();
+            setDone(code);
+          }}>
+            <div className="grid gap-4 sm:grid-cols-2"><input required name="name" placeholder="Họ và tên" className={input} /><input required name="phone" type="tel" pattern="0[0-9]{9}" placeholder="Số điện thoại" className={input} /></div>
+            <input required name="address" placeholder="Địa chỉ nhận hàng" className={input} />
             <textarea placeholder="Ghi chú (không bắt buộc)" rows={2} className="w-full rounded-md border border-border-strong bg-background p-3 text-sm outline-none focus:border-primary" />
             <div className="rounded-lg border border-border bg-card p-5 text-sm"><div className="flex justify-between"><span className="text-stone">Tạm tính</span><span>{money(subtotal)}</span></div><div className="mt-2 flex justify-between"><span className="text-stone">Vận chuyển</span><span>{shipping ? money(shipping) : "Miễn phí"}</span></div><div className="mt-3 flex justify-between border-t border-border pt-3 font-display text-base font-bold"><span>Tổng (COD)</span><span>{money(subtotal + shipping)}</span></div></div>
             <Button type="submit" size="lg">Đặt hàng</Button>

@@ -49,7 +49,7 @@ function Checkout() {
           }}>
             <div className="grid gap-4 sm:grid-cols-2"><input required name="name" placeholder="Họ và tên" className={input} /><input required name="phone" type="tel" pattern="0[0-9]{9}" placeholder="Số điện thoại" className={input} /></div>
             <input required name="address" placeholder="Địa chỉ nhận hàng" className={input} />
-            <textarea placeholder="Ghi chú (không bắt buộc)" rows={2} className="w-full rounded-md border border-border-strong bg-background p-3 text-sm outline-none focus:border-primary" />
+            <textarea name="note" placeholder="Ghi chú (không bắt buộc)" rows={2} className="w-full rounded-md border border-border-strong bg-background p-3 text-sm outline-none focus:border-primary" />
             <div className="rounded-lg border border-border bg-card p-5 text-sm"><div className="flex justify-between"><span className="text-stone">Tạm tính</span><span>{money(subtotal)}</span></div><div className="mt-2 flex justify-between"><span className="text-stone">Vận chuyển</span><span>{shipping ? money(shipping) : "Miễn phí"}</span></div><div className="mt-3 flex justify-between border-t border-border pt-3 font-display text-base font-bold"><span>Tổng (COD)</span><span>{money(subtotal + shipping)}</span></div></div>
             <Button type="submit" size="lg">Đặt hàng</Button>
           </form>

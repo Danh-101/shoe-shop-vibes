@@ -25,7 +25,15 @@ function read(): Order[] {
   }
 }
 
+export const ORDER_STATUSES = ["Chờ xác nhận", "Đã xác nhận", "Đang giao", "Đã giao", "Đã huỷ"];
+
 export const orders = {
+  list: read,
+  updateStatus(code: string, status: string) {
+    const list = read().map((o) => (o.code === code ? { ...o, status } : o));
+    window.localStorage.setItem(KEY, JSON.stringify(list));
+    return list;
+  },
   add(order: Order) {
     const list = read();
     list.unshift(order);

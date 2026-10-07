@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GioHangRouteImport } from './routes/gio-hang'
+import { Route as QuanTriRouteImport } from './routes/quan-tri'
 import { Route as ThanhToanRouteImport } from './routes/thanh-toan'
 import { Route as TraCuuDonHangRouteImport } from './routes/tra-cuu-don-hang'
 import { Route as SanPhamSlugRouteImport } from './routes/san-pham.$slug'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const GioHangRoute = GioHangRouteImport.update({
   id: '/gio-hang',
   path: '/gio-hang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuanTriRoute = QuanTriRouteImport.update({
+  id: '/quan-tri',
+  path: '/quan-tri',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThanhToanRoute = ThanhToanRouteImport.update({
@@ -44,6 +50,7 @@ const SanPhamSlugRoute = SanPhamSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/gio-hang': typeof GioHangRoute
+  '/quan-tri': typeof QuanTriRoute
   '/thanh-toan': typeof ThanhToanRoute
   '/tra-cuu-don-hang': typeof TraCuuDonHangRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gio-hang': typeof GioHangRoute
+  '/quan-tri': typeof QuanTriRoute
   '/thanh-toan': typeof ThanhToanRoute
   '/tra-cuu-don-hang': typeof TraCuuDonHangRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/gio-hang': typeof GioHangRoute
+  '/quan-tri': typeof QuanTriRoute
   '/thanh-toan': typeof ThanhToanRoute
   '/tra-cuu-don-hang': typeof TraCuuDonHangRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
@@ -66,14 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/gio-hang' | '/thanh-toan' | '/tra-cuu-don-hang' | '/san-pham/$slug'
+    | '/'
+    | '/gio-hang'
+    | '/quan-tri'
+    | '/thanh-toan'
+    | '/tra-cuu-don-hang'
+    | '/san-pham/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/gio-hang' | '/thanh-toan' | '/tra-cuu-don-hang' | '/san-pham/$slug'
+    | '/'
+    | '/gio-hang'
+    | '/quan-tri'
+    | '/thanh-toan'
+    | '/tra-cuu-don-hang'
+    | '/san-pham/$slug'
   id:
     | '__root__'
     | '/'
     | '/gio-hang'
+    | '/quan-tri'
     | '/thanh-toan'
     | '/tra-cuu-don-hang'
     | '/san-pham/$slug'
@@ -82,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GioHangRoute: typeof GioHangRoute
+  QuanTriRoute: typeof QuanTriRoute
   ThanhToanRoute: typeof ThanhToanRoute
   TraCuuDonHangRoute: typeof TraCuuDonHangRoute
   SanPhamSlugRoute: typeof SanPhamSlugRoute
@@ -101,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/gio-hang'
       fullPath: '/gio-hang'
       preLoaderRoute: typeof GioHangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quan-tri': {
+      id: '/quan-tri'
+      path: '/quan-tri'
+      fullPath: '/quan-tri'
+      preLoaderRoute: typeof QuanTriRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/thanh-toan': {
@@ -130,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GioHangRoute: GioHangRoute,
+  QuanTriRoute: QuanTriRoute,
   ThanhToanRoute: ThanhToanRoute,
   TraCuuDonHangRoute: TraCuuDonHangRoute,
   SanPhamSlugRoute: SanPhamSlugRoute,

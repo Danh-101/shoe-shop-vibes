@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep catalog records in `src/data/products.ts` and render list/detail views from that shared local source; this prevents drift without inventing backend behavior.
+- Keep `/admin` as a redirect to `/quan-tri` so both entry URLs use the same administration screen.
